@@ -13,6 +13,9 @@ function App() {
   return (
     <div className="App">
       <h3>Users : {users.length}</h3>
+      {
+        users.map(user => <p key={user.id}>{user.name} {user.email}</p>)
+      }
     </div>
   );
 }
