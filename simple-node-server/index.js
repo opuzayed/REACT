@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -11,13 +12,37 @@ app.get('/', (req, res) => {
 });
 
 const users = [
-    {id : 1, name : 'sabana', email : 'saba@gmail.com'},
-    {id : 2, name : 'sabila', email : 'sabila@gmail.com'},
-    {id : 3, name : 'kabila', email : 'kabila@gmail.com'}
+    {id : 1, name : 'Sabana', email : 'saba@gmail.com'},
+    {id : 2, name : 'Sabila', email : 'sabila@gmail.com'},
+    {id : 3, name : 'Kabila', email : 'kabila@gmail.com'}
 ];
 
+//pass : ebNk79LB2dSKO2lV
+//Name : dbUserOpu
+
+
+
+const uri = "mongodb+srv://dbUserOpu:ebNk79LB2dSKO2lV@cluster0.rsulfhn.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+  const collection = client.db("SimpleNode").collection("users");
+  // perform actions on the collection object
+  console.log('db running');
+  client.close();
+});
+
+
 app.get('/users', (req, res) => {
-    res.send(users);
+    if(req.query.name)
+    {
+        const search = req.query.name;
+        const filtered = users.filter(u => u.name.toLowerCase().indexOf(search)>=0);
+        res.send(filtered);
+    }
+    else{
+
+        res.send(users);
+    }
 });
 
 app.post('/users', (req,res) => {
