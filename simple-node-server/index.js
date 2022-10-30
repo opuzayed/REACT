@@ -24,12 +24,19 @@ const users = [
 
 const uri = "mongodb+srv://dbUserOpu:ebNk79LB2dSKO2lV@cluster0.rsulfhn.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("SimpleNode").collection("users");
-  // perform actions on the collection object
-  console.log('db running');
-  client.close();
-});
+
+async function run(){
+    try{
+        const userCollection = client.db('simplenode').collection('users');
+        const user = {name : 'opus', email : 'opus@outlook.com'};
+        const result = await userCollection.insertOne(user);
+        console.log(result);
+    }
+    finally{
+
+    }
+}
+run().catch(error =>console.log(error))
 
 
 app.get('/users', (req, res) => {
