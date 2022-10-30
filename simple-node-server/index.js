@@ -29,8 +29,21 @@ async function run(){
     try{
         const userCollection = client.db('simplenode').collection('users');
         const user = {name : 'opus', email : 'opus@outlook.com'};
-        const result = await userCollection.insertOne(user);
-        console.log(result);
+        /* const result = await userCollection.insertOne(user);
+        console.log(result); */
+        app.post('/users', async(req,res) => {
+            // console.log('post api called');
+            // user.id = users.length + 1;
+           /*  users.push(user);
+            console.log(user); */
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            user.id = result.insertedId;
+            console.log(result);
+            res.send(user);
+            
+        });
+
     }
     finally{
 
@@ -52,14 +65,14 @@ app.get('/users', (req, res) => {
     }
 });
 
-app.post('/users', (req,res) => {
+/* app.post('/users', (req,res) => {
     console.log('post api called');
     const user = req.body;
     user.id = users.length + 1;
     users.push(user);
     console.log(user);
     res.send(user);
-});
+}); */
 
 app.listen(port, () => {
     console.log(`server running on port ${port}`);
