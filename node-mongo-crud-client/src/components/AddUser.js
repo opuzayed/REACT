@@ -2,9 +2,26 @@ import React, { useState } from 'react';
 
 const AddUser = () => {
     const [user, setUser] = useState({name :'opu', email : 'opu@yahoo.com'});
+
     const handleAddUser = event => {
         event.preventDefault();
         console.log(user);
+
+        fetch('http://localhost:5000/users', {
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json',
+            },
+            body : JSON.stringify(user),
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.acknowledged)
+            {
+                alert('user added successfully');
+                event.target.reset();
+            }
+        })
     }
 
     const handleInputBlur = event => {
