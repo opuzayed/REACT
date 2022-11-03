@@ -13,8 +13,12 @@ const Orders = () => {
     },[user?.email]);
 
     const handleDelete = id => {
-      const proceed = window.alert('Are You sure you want to cancel this order');
-      if(proceed){
+      console.log(id);
+      const proceed = window.confirm('Are You sure you want to cancel this order');
+      if(proceed)
+      
+      {
+       
         fetch(`http://localhost:5000/orders/${id}`, {
           method : 'DELETE'
         })
@@ -29,6 +33,27 @@ const Orders = () => {
           }
         })
       }
+  }
+
+  const handleStatusUpdate = id => {
+        fetch(`http://localhost:5000/orders/${id}`, {
+          method:'PATCH',
+          headers : {
+              'Content-Type' : 'application/json'
+          },
+          body : JSON.stringify({status : 'Approved'})
+        })
+        .then(res => res.json())
+        .then(data =>{
+          console.log(data);
+          if(data.modifiedCount>0){
+            const remaining = orders.filter(odr => odr._id !== id);
+            const approving = orders.find(odr => odr._id === id);
+            approving.status = 'Approved';
+            const newOrders = [approving, ...remaining];
+            setOrders(newOrders);
+          }
+        })
   }
 
     return (
@@ -56,6 +81,7 @@ const Orders = () => {
         key={order._id}
         order={order}
         handleDelete={handleDelete}
+        handleStatusUpdate = {handleStatusUpdate}
         ></OrderRow>)
       }
     </tbody>
