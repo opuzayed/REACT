@@ -23,6 +23,24 @@ const CheckOut = () => {
                 phone,
                 message      
             }
+
+            fetch('http://localhost:5000/orders', {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify(order)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if(data.acknowledged)
+                {
+                    alert('order placed successfully');
+                    form.reset();
+                }
+            })
+            .then(error => console.error(error));
         }
 
         
@@ -35,10 +53,10 @@ const CheckOut = () => {
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
                         <input type="text" placeholder="First Name" name='firstName' className="input input-bordered w-full" />
                         <input type="text" placeholder="Last Name"  name='lastName' className="input input-bordered w-full" />
-                        <input type="text" placeholder="Your Phone" name='phone' className="input input-bordered w-full" />
+                        <input type="text" placeholder="Your Phone" name='phone' className="input input-bordered w-full" required/>
                         <input type="text" placeholder="Your Email" name='email' defaultValue = {user?.email} className="input input-bordered w-full" readOnly/>
                     </div>
-                    <textarea className="textarea textarea-bordered  name='message' h-24 w-full" placeholder="Your Message"></textarea>
+                    <textarea className="textarea textarea-bordered h-24 w-full"  name='message' placeholder="Your Message"></textarea>
                     <input className='btn' type="submit" value="Place your Order" />
             </form>
         </div>
